@@ -12,30 +12,27 @@ body{
     justify-content: center;
     align-items: center;
     height: 100vh;
+    overflow: hidden;
 }
 
-.field{
-
-    
+.field{    
     width: min(90vw, 90vh);
     height: min(90vw, 90vh);
-
     display: grid;
     grid-template-columns: repeat(var(--cols), 1fr);
     grid-template-rows: repeat(var(--rows), 1fr);
-
-    gap: 3vw;
+    gap: min(1vw,1vh);
 }
 
 .tile{
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 3vw;
-    font-size: 10vw;
+    border-radius: min(1vw,1vh);
+    font-size: min(10vw,10vh);
     user-select: none;
     background-color: #333;
-    box-shadow: 0px 0px 6px 5px #E0CA23;
+    box-shadow: 0 0 min(0.5vh,0.5vw) min(0.5vh,0.5vw) #E0CA23;
 }
 
 .green{
