@@ -2,8 +2,8 @@ import m from "mithril";
 import tagl from "tagl-mithril";
 
 const { div, h1, p } = tagl(m);
-const { random, trunc, sign } = Math;
-const key_map = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+const { random, trunc } = Math;
+const KEY_MAP = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
 
 const range = (n) => Array.from({ length: n }, (_, i) => i);
 const randomInt = (min, max) => trunc(random() * (max - min + 1)) + min;
@@ -24,16 +24,17 @@ const up = ({ x, y }) => ({ x, y: y - 1 });
 const down = ({ x, y }) => ({ x, y: y + 1 });
 const left = ({ x, y }) => ({ x: x - 1, y });
 const right = ({ x, y }) => ({ x: x + 1, y });
-const directions = [left, right, up, down];
+const DIRECTIONS = [left, right, up, down];
 const eqCol = (p1, p2) => p1.x === p2.x;
 const eqRow = (p1, p2) => p1.y === p2.y;
 const eq = (p1, p2) => eqRow(p1, p2) && eqCol(p1, p2);
+const emptyIdx = () => state.items.indexOf(0);
 
 const newGame = () => {
-  state.items = range(state.N*state.M - 1)
+  state.items = range(state.N * state.M - 1)
     .map((i) => i + 1)
     .concat(0);
-  range(state.shuffle).map(() => move(randomInt(0, key_map.length - 1)));
+  range(state.shuffle).map(() => move(randomInt(0, KEY_MAP.length - 1)));
 };
 
 const shift = (empty, clicked) => {
@@ -55,15 +56,13 @@ const shift = (empty, clicked) => {
   m.redraw();
 };
 
-const handle_click = (item, field_idx) => {
+const handleClick = (item, clicked_idx) => {
   if (item === 0) return;
-  const empty = crds(state.items.indexOf(0));
-  const clicked = crds(field_idx);
-  shift(empty, clicked);
+  shift(crds(emptyIdx()), crds(clicked_idx));
 };
 const move = (key) => {
-  const empty = crds(state.items.indexOf(0));
-  const clicked = directions[key](empty);
+  const empty = crds(emptyIdx());
+  const clicked = DIRECTIONS[key](empty);
   if (!onBoard(clicked)) return;
   shift(empty, clicked);
 };
@@ -78,7 +77,7 @@ m.mount(document.body, {
         state.items.map((item, i) =>
           item !== 0
             ? div.tile[state.sorted ? "green" : ""](
-                { key: "" + item, onclick: () => handle_click(item, i) },
+                { key: "" + item, onclick: () => handleClick(item, i) },
                 item
               )
             : state.sorted
@@ -96,6 +95,5 @@ m.mount(document.body, {
 });
 
 window.addEventListener("keydown", (e) => {
-  move(key_map.indexOf(e.key));
-  m.redraw();
+  move(KEY_MAP.indexOf(e.key));
 });
