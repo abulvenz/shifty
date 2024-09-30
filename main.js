@@ -14,7 +14,7 @@ const state = {
   sorted: false,
   N: 4,
   M: 4,
-  shuffle: 0,
+  shuffle: 100,
 };
 
 const crds = (idx) => ({ x: idx % state.N, y: trunc(idx / state.N) });
@@ -85,7 +85,7 @@ m.mount(document.body, {
             ? div.tile.green(
                 {
                   key: "" + item,
-                  on_click: (e) => newGame(),
+                  onclick: (e) => newGame(),
                 },
                 "×"
               )
